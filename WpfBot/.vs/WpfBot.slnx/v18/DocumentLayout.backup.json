@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\08350\\OneDrive\\Desktop\\Bot Wpf\\WpfBot\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8B97C605-C692-4197-98E0-B08736C9F756}|WpfBot.csproj|c:\\users\\08350\\onedrive\\desktop\\bot wpf\\wpfbot\\cbbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8B97C605-C692-4197-98E0-B08736C9F756}|WpfBot.csproj|solutionrelative:cbbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2267D3AF-D70D-1AC1-ED38-9B3522024888}|WpfBot.csproj|c:\\users\\08350\\onedrive\\desktop\\bot wpf\\wpfbot\\cbbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2267D3AF-D70D-1AC1-ED38-9B3522024888}|WpfBot.csproj|solutionrelative:cbbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8B97C605-C692-4197-98E0-B08736C9F756}|WpfBot.csproj|c:\\users\\08350\\onedrive\\desktop\\bot wpf\\wpfbot\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{8B97C605-C692-4197-98E0-B08736C9F756}|WpfBot.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{2267D3AF-D70D-1AC1-ED38-9B3522024888}|WpfBot.csproj|c:\\users\\08350\\onedrive\\desktop\\bot wpf\\wpfbot\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2267D3AF-D70D-1AC1-ED38-9B3522024888}|WpfBot.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8B97C605-C692-4197-98E0-B08736C9F756}|WpfBot.csproj|c:\\users\\08350\\onedrive\\desktop\\bot wpf\\wpfbot\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8B97C605-C692-4197-98E0-B08736C9F756}|WpfBot.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2267D3AF-D70D-1AC1-ED38-9B3522024888}|WpfBot.csproj|c:\\users\\08350\\onedrive\\desktop\\bot wpf\\wpfbot\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2267D3AF-D70D-1AC1-ED38-9B3522024888}|WpfBot.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,9 +42,9 @@
               "Title": "CbBot.cs",
               "DocumentMoniker": "C:\\Users\\08350\\OneDrive\\Desktop\\Bot Wpf\\WpfBot\\CbBot.cs",
               "RelativeDocumentMoniker": "CbBot.cs",
-              "ToolTip": "C:\\Users\\08350\\OneDrive\\Desktop\\Bot Wpf\\WpfBot\\CbBot.cs*",
-              "RelativeToolTip": "CbBot.cs*",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAkwHAAAAABAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\08350\\OneDrive\\Desktop\\Bot Wpf\\WpfBot\\CbBot.cs",
+              "RelativeToolTip": "CbBot.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAAGYAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-29T14:04:29.802Z",
               "EditorCaption": ""
@@ -57,7 +57,7 @@
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\08350\\OneDrive\\Desktop\\Bot Wpf\\WpfBot\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-29T13:38:01.706Z",
               "EditorCaption": ""

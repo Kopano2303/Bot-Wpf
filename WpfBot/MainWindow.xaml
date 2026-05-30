@@ -16,7 +16,7 @@
 
         <!-- Header -->
         <TextBlock Grid.Row="0"
-                   Text="CyberBot Security Assistant"
+                   Text="CyberBot Security Awareness"
                    FontSize="24"
                    FontWeight="Bold"
                    Margin="0,0,0,10"/>

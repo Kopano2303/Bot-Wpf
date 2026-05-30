@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WpfBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f4a4b683c33f68737135f471bc6c98f7346e306")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a0c1ab6e5fff397d159bf3227ebbb04d411d9667")]
 [assembly: System.Reflection.AssemblyProductAttribute("WpfBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WpfBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
