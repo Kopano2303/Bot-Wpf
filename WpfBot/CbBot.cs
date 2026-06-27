@@ -3,217 +3,321 @@ using System.Collections.Generic;
 
 namespace WpfBot
 {
-
     internal class CbBot
     {
-
         public string Name;
 
+        // =========================
+        // BASIC CHAT STATE
+        // =========================
         private string userName = "";
-        private string favouriteTopic = "";
-        private string lastTopic = "";
-
-        private string mood = "";
-
         private Random random = new Random();
 
-        private List<string> activityLog = new List<string>();
+        // =========================
+        // TASK 1: TASK SYSTEM
+        // =========================
+        private List<TaskItem> tasks = new List<TaskItem>();
+
+        // =========================
+        // TASK 2: QUIZ SYSTEM
+        // =========================
+        private List<Question> quizQuestions = new List<Question>();
+        private int currentQuestionIndex = 0;
+        private int score = 0;
+        private bool quizActive = false;
+
+        // =========================
+        // TASK 4: ACTIVITY LOG
+        // =========================
+        private List<ActivityItem> activityLog = new List<ActivityItem>();
 
         public CbBot(string name)
         {
             Name = name;
-            activityLog.Add("CyberBot started.");
+            AddActivity("CyberBot started");
         }
 
-        private void AddActivity(string activity)
+        // =========================
+        // ACTIVITY LOGGER (TASK 4)
+        // =========================
+        private void AddActivity(string message)
         {
-            activityLog.Add(activity);
+            activityLog.Add(new ActivityItem
+            {
+                Message = message,
+                Time = DateTime.Now
+            });
 
             if (activityLog.Count > 10)
-            {
                 activityLog.RemoveAt(0);
-            }
         }
 
         private string ShowActivityLog()
         {
-            string log = "Recent Activity\n\n";
+            string log = "Recent Activity (Last 10)\n\n";
 
-            foreach (string item in activityLog)
-            {
+            foreach (var item in activityLog)
                 log += "• " + item + "\n";
-            }
 
             return log;
         }
 
-        private string RandomResponse(string[] replies)
+        // =========================
+        // QUIZ LOADER
+        // =========================
+        private void LoadQuiz()
         {
-            return replies[random.Next(replies.Length)];
+            quizQuestions = new List<Question>
+            {
+                new Question
+                {
+                    Text = "What is phishing?",
+                    Options = new[] { "Firewall", "Scam to steal data", "Backup", "Encryption" },
+                    CorrectAnswer = "B",
+                    Explanation = "Phishing tricks users into giving sensitive info."
+                },
+                new Question
+                {
+                    Text = "True or False: 123456 is strong password.",
+                    Options = new[] { "True", "False" },
+                    CorrectAnswer = "B",
+                    Explanation = "It is extremely weak."
+                },
+                new Question
+                {
+                    Text = "What is malware?",
+                    Options = new[] { "Good software", "Malicious software", "Firewall", "VPN" },
+                    CorrectAnswer = "B",
+                    Explanation = "Malware is harmful software."
+                },
+                new Question
+                {
+                    Text = "What does 2FA mean?",
+                    Options = new[] { "Two-Factor Authentication", "Fast Access", "File Access", "Firewall" },
+                    CorrectAnswer = "A",
+                    Explanation = "Extra security layer."
+                },
+                new Question
+                {
+                    Text = "What should you do with phishing emails?",
+                    Options = new[] { "Click", "Reply", "Report", "Ignore forever" },
+                    CorrectAnswer = "C",
+                    Explanation = "Reporting helps protect users."
+                },
+                new Question
+                {
+                    Text = "True or False: Public Wi-Fi is safe.",
+                    Options = new[] { "True", "False" },
+                    CorrectAnswer = "B",
+                    Explanation = "Public Wi-Fi is risky."
+                },
+                new Question
+                {
+                    Text = "Firewall purpose?",
+                    Options = new[] { "Blocks traffic", "Deletes files", "Encrypts", "Emails" },
+                    CorrectAnswer = "A",
+                    Explanation = "Filters network traffic."
+                },
+                new Question
+                {
+                    Text = "Social engineering?",
+                    Options = new[] { "Hacking", "Tricking people", "Coding", "Encrypting" },
+                    CorrectAnswer = "B",
+                    Explanation = "Manipulating humans."
+                },
+                new Question
+                {
+                    Text = "Encryption?",
+                    Options = new[] { "Delete", "Hide data", "Scan", "Backup" },
+                    CorrectAnswer = "B",
+                    Explanation = "Makes data unreadable."
+                },
+                new Question
+                {
+                    Text = "Reusing passwords safe?",
+                    Options = new[] { "True", "False" },
+                    CorrectAnswer = "B",
+                    Explanation = "It is unsafe."
+                }
+            };
         }
 
+        private string GetQuestion()
+        {
+            if (currentQuestionIndex >= quizQuestions.Count)
+            {
+                quizActive = false;
+
+                AddActivity("Quiz completed");
+
+                return $"Quiz Complete!\nScore: {score}/{quizQuestions.Count}\n" +
+                       (score >= 8 ? "Great job!" : "Keep learning.");
+            }
+
+            var q = quizQuestions[currentQuestionIndex];
+
+            string options = "";
+            char label = 'A';
+
+            foreach (var opt in q.Options)
+                options += label++ + ") " + opt + "\n";
+
+            return $"Q{currentQuestionIndex + 1}: {q.Text}\n\n{options}";
+        }
+
+        // =========================
+        // NLP HELPERS (TASK 3)
+        // =========================
+        private bool IsTaskRequest(string input)
+        {
+            return input.Contains("task") || input.Contains("add task");
+        }
+
+        private bool IsReminderRequest(string input)
+        {
+            return input.Contains("remind");
+        }
+
+        private (string title, int? minutes) ParseInput(string input)
+        {
+            string text = input.ToLower();
+
+            text = text.Replace("remind me to", "")
+                       .Replace("add task to", "")
+                       .Replace("create task", "")
+                       .Trim();
+
+            int? minutes = null;
+
+            if (text.Contains("tomorrow"))
+                minutes = 1440;
+            else if (text.Contains("today"))
+                minutes = 0;
+
+            text = text.Replace("tomorrow", "")
+                       .Replace("today", "")
+                       .Trim();
+
+            return (text, minutes);
+        }
+
+        // =========================
+        // MAIN CHAT ENGINE
+        // =========================
         public string GetResponse(string input)
         {
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                return "I'm not sure I understand. Can you try rephrasing?";
-            }
-
             input = input.ToLower().Trim();
 
-            if (input.StartsWith("my name is "))
+            // =========================
+            // QUIZ ACTIVE MODE
+            // =========================
+            if (quizActive)
             {
-                userName = input.Replace("my name is ", "");
-                AddActivity("User name saved.");
-                return "Nice to meet you " + userName + ". I'll remember your name.";
+                var q = quizQuestions[currentQuestionIndex];
+
+                bool correct = input.ToUpper() == q.CorrectAnswer;
+
+                if (correct) score++;
+
+                AddActivity(correct ? "Quiz correct" : "Quiz wrong");
+
+                string feedback = correct ? "Correct! " + q.Explanation : "Wrong. " + q.Explanation;
+
+                currentQuestionIndex++;
+
+                return feedback + "\n\n" + GetQuestion();
             }
 
-            if (input == "hi" || input == "hello" || input == "hey")
+            // =========================
+            // NLP: TASK / REMINDER
+            // =========================
+            if (IsReminderRequest(input))
             {
-                AddActivity("Greeting");
+                var p = ParseInput(input);
 
-                return userName == ""
-                    ? "Hello! Welcome to CyberBot."
-                    : "Welcome back " + userName + "! How can I help you today?";
+                tasks.Add(new TaskItem
+                {
+                    Title = p.title,
+                    Description = "Reminder task",
+                    ReminderTime = DateTime.Now.AddMinutes(p.minutes ?? 10),
+                    Completed = false
+                });
+
+                AddActivity("Reminder created: " + p.title);
+
+                return $"Reminder set for: {p.title}";
             }
 
-            if (input.Contains("worried") || input.Contains("scared"))
+            if (IsTaskRequest(input))
             {
-                mood = "worried";
-                AddActivity("Sentiment: Worried");
+                var p = ParseInput(input);
 
-                string tip =
-                    "Scammers often rely on urgency and fear.\n" +
-                    "Never share personal info quickly, and always verify messages.";
+                tasks.Add(new TaskItem
+                {
+                    Title = p.title,
+                    Description = "Auto task",
+                    ReminderTime = null,
+                    Completed = false
+                });
 
-                return "It's completely understandable to feel that way. Cyber threats can be overwhelming.\n\n" + tip;
+                AddActivity("Task created: " + p.title);
+
+                return $"Task added: {p.title}";
             }
 
-            if (input.Contains("frustrated") || input.Contains("angry"))
+            // =========================
+            // QUIZ START
+            // =========================
+            if (input.Contains("quiz"))
             {
-                mood = "frustrated";
-                AddActivity("Sentiment: Frustrated");
+                LoadQuiz();
+                quizActive = true;
+                currentQuestionIndex = 0;
+                score = 0;
 
-                return "I understand you're frustrated. Cybersecurity can be confusing at first.\n\nLet me help simplify it for you.";
+                AddActivity("Quiz started");
+
+                return GetQuestion();
             }
 
-            if (input.Contains("curious"))
+            // =========================
+            // TASK COMMANDS
+            // =========================
+            if (input.Contains("show tasks"))
             {
-                mood = "curious";
-                AddActivity("Sentiment: Curious");
+                string result = "Tasks:\n\n";
 
-                return "Great mindset! Curiosity is important in cybersecurity. What topic would you like to explore?";
+                foreach (var t in tasks)
+                    result += "• " + t + "\n";
+
+                return result;
             }
 
-            if (input.Contains("happy") || input.Contains("good") || input.Contains("great"))
+            // =========================
+            // ACTIVITY LOG (TASK 4)
+            // =========================
+            if (input.Contains("activity log") ||
+                input.Contains("what have you done"))
             {
-                mood = "happy";
-                AddActivity("Sentiment: Happy");
-
-                return "I'm glad you're feeling good! Let's keep building your cybersecurity knowledge.";
-            }
-
-            if (input.Contains("show activity log") || input.Contains("what have you done for me"))
-            {
-                AddActivity("Activity log viewed.");
+                AddActivity("Activity log viewed");
                 return ShowActivityLog();
             }
+
+            // =========================
+            // BASIC RESPONSES
+            // =========================
+            if (input.Contains("hello") || input.Contains("hi"))
+                return "Hello! I am CyberBot.";
 
             if (input.Contains("password"))
-            {
-                lastTopic = "Password Security";
-                favouriteTopic = "Password Security";
-                AddActivity("Keyword: Password");
-
-                return RandomResponse(new string[]
-                {
-                    "Use strong, unique passwords with letters, numbers, and symbols.",
-                    "Never reuse passwords across different accounts.",
-                    "A password manager can help store secure passwords safely."
-                });
-            }
-
-            if (input.Contains("privacy"))
-            {
-                lastTopic = "Privacy";
-                favouriteTopic = "Privacy";
-                AddActivity("Keyword: Privacy");
-
-                return RandomResponse(new string[]
-                {
-                    "Limit personal information shared online.",
-                    "Adjust privacy settings on social media accounts.",
-                    "Think before posting sensitive data."
-                });
-            }
-
-            if (input.Contains("scam"))
-            {
-                AddActivity("Keyword: Scam");
-
-                return RandomResponse(new string[]
-                {
-                    "Never trust messages asking for urgent money or data.",
-                    "Always verify the sender before responding.",
-                    "Scammers often pretend to be official organisations."
-                });
-            }
+                return "Use strong passwords.";
 
             if (input.Contains("phishing"))
-            {
-                lastTopic = "Phishing";
-                favouriteTopic = "Phishing";
-                AddActivity("Keyword: Phishing");
-
-                return RandomResponse(new string[]
-                {
-                    "Check email addresses carefully before clicking links.",
-                    "Do not enter passwords from email links.",
-                    "Urgent messages are often phishing attempts."
-                });
-            }
-
-            if (input.Contains("malware"))
-            {
-                lastTopic = "Malware";
-                favouriteTopic = "Malware";
-                AddActivity("Keyword: Malware");
-
-                return RandomResponse(new string[]
-                {
-                    "Avoid downloading files from unknown sources.",
-                    "Keep antivirus software updated.",
-                    "Malware can steal or damage your data."
-                });
-            }
-
-            if (input.Contains("continue") || input.Contains("tell me more") || input.Contains("explain more"))
-            {
-                if (lastTopic != "")
-                {
-                    AddActivity("Follow-up detected.");
-                    return "Continuing " + lastTopic + ": Always stay alert and follow safe cybersecurity practices.";
-                }
-
-                return "Tell me a topic first so I can continue.";
-            }
-
-            if (input.Contains("show activity log"))
-            {
-                AddActivity("Activity log requested.");
-                return ShowActivityLog();
-            }
-
-            if (input.Contains("help"))
-            {
-                AddActivity("Help opened.");
-
-                return "Try asking about phishing, scams, passwords, privacy or malware.";
-            }
+                return "Phishing is a scam attack.";
 
             AddActivity("Unknown input");
 
-            return "I'm not sure I understand. Can you try rephrasing?";
+            return "Try: quiz, task, remind, activity log";
         }
     }
 }
