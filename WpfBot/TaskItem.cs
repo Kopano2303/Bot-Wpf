@@ -1,23 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WpfBot
 {
-    public class TaskItem
+    internal class TaskItem
     {
+        public int Id { get; set; }
+
         public string Title { get; set; }
+
         public string Description { get; set; }
+
         public DateTime? ReminderTime { get; set; }
+
         public bool Completed { get; set; }
 
         public override string ToString()
         {
             string reminder = ReminderTime.HasValue
-                ? $" (Reminder: {ReminderTime.Value})"
-                : "";
+                ? ReminderTime.Value.ToString("dd/MM/yyyy HH:mm")
+                : "No Reminder";
 
-            return $"{Title} - {Description}{reminder} - {(Completed ? "Done" : "Pending")}";
+            return $"{Title}\nDescription: {Description}\nReminder: {reminder}\nStatus: {(Completed ? "Completed" : "Pending")}";
         }
     }
 }

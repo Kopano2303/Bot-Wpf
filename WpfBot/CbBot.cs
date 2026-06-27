@@ -1,34 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace WpfBot
+﻿namespace WpfBot
 {
     internal class CbBot
     {
         public string Name;
 
-        // =========================
-        // BASIC CHAT STATE
-        // =========================
         private string userName = "";
         private Random random = new Random();
 
-        // =========================
-        // TASK 1: TASK SYSTEM
-        // =========================
         private List<TaskItem> tasks = new List<TaskItem>();
 
-        // =========================
-        // TASK 2: QUIZ SYSTEM
-        // =========================
         private List<Question> quizQuestions = new List<Question>();
         private int currentQuestionIndex = 0;
         private int score = 0;
         private bool quizActive = false;
 
-        // =========================
-        // TASK 4: ACTIVITY LOG
-        // =========================
         private List<ActivityItem> activityLog = new List<ActivityItem>();
 
         public CbBot(string name)
@@ -37,9 +22,6 @@ namespace WpfBot
             AddActivity("CyberBot started");
         }
 
-        // =========================
-        // ACTIVITY LOGGER (TASK 4)
-        // =========================
         private void AddActivity(string message)
         {
             activityLog.Add(new ActivityItem
@@ -62,9 +44,6 @@ namespace WpfBot
             return log;
         }
 
-        // =========================
-        // QUIZ LOADER
-        // =========================
         private void LoadQuiz()
         {
             quizQuestions = new List<Question>
@@ -165,9 +144,6 @@ namespace WpfBot
             return $"Q{currentQuestionIndex + 1}: {q.Text}\n\n{options}";
         }
 
-        // =========================
-        // NLP HELPERS (TASK 3)
-        // =========================
         private bool IsTaskRequest(string input)
         {
             return input.Contains("task") || input.Contains("add task");
@@ -201,36 +177,30 @@ namespace WpfBot
             return (text, minutes);
         }
 
-        // =========================
-        // MAIN CHAT ENGINE
-        // =========================
         public string GetResponse(string input)
         {
             input = input.ToLower().Trim();
 
-            // =========================
-            // QUIZ ACTIVE MODE
-            // =========================
             if (quizActive)
             {
                 var q = quizQuestions[currentQuestionIndex];
 
                 bool correct = input.ToUpper() == q.CorrectAnswer;
 
-                if (correct) score++;
+                if (correct)
+                    score++;
 
                 AddActivity(correct ? "Quiz correct" : "Quiz wrong");
 
-                string feedback = correct ? "Correct! " + q.Explanation : "Wrong. " + q.Explanation;
+                string feedback = correct
+                    ? "Correct! " + q.Explanation
+                    : "Wrong. " + q.Explanation;
 
                 currentQuestionIndex++;
 
                 return feedback + "\n\n" + GetQuestion();
             }
 
-            // =========================
-            // NLP: TASK / REMINDER
-            // =========================
             if (IsReminderRequest(input))
             {
                 var p = ParseInput(input);
@@ -265,9 +235,6 @@ namespace WpfBot
                 return $"Task added: {p.title}";
             }
 
-            // =========================
-            // QUIZ START
-            // =========================
             if (input.Contains("quiz"))
             {
                 LoadQuiz();
@@ -280,9 +247,6 @@ namespace WpfBot
                 return GetQuestion();
             }
 
-            // =========================
-            // TASK COMMANDS
-            // =========================
             if (input.Contains("show tasks"))
             {
                 string result = "Tasks:\n\n";
@@ -293,9 +257,6 @@ namespace WpfBot
                 return result;
             }
 
-            // =========================
-            // ACTIVITY LOG (TASK 4)
-            // =========================
             if (input.Contains("activity log") ||
                 input.Contains("what have you done"))
             {
@@ -303,9 +264,6 @@ namespace WpfBot
                 return ShowActivityLog();
             }
 
-            // =========================
-            // BASIC RESPONSES
-            // =========================
             if (input.Contains("hello") || input.Contains("hi"))
                 return "Hello! I am CyberBot.";
 

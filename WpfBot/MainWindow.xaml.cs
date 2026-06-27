@@ -16,7 +16,7 @@ namespace WpfBot
             ChatBox.Items.Add("CyberBot: Welcome to CyberSecurity Awareness Chatbot!");
             ChatBox.Items.Add("CyberBot: Type 'help' to see what I can do.");
 
-           // StatusText.Text = "Status: Ready";
+           
         }
 
         private void Send_Click(object sender, RoutedEventArgs e)
@@ -34,7 +34,6 @@ namespace WpfBot
 
             InputBox.Clear();
 
-            //StatusText.Text = "Status: Message processed";
         }
 
     }
