@@ -2,10 +2,9 @@
 
 namespace WpfBot
 {
-    internal class ActivityItem
+    public class ActivityItem
     {
         public DateTime Time { get; set; }
-
         public string Message { get; set; }
 
         public ActivityItem()
@@ -21,7 +20,7 @@ namespace WpfBot
 
         public override string ToString()
         {
-            return $"[{Time:dd/MM/yyyy HH:mm:ss}] {Message}";
+            return "[" + Time.ToString("dd/MM/yyyy HH:mm:ss") + "] " + Message;
         }
     }
 }

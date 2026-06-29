@@ -2,23 +2,20 @@
 
 namespace WpfBot
 {
-    internal class Question
+    public class Question
     {
-        public string QuestionText { get; set; }
-
+        public string Text { get; set; }
         public string[] Options { get; set; }
-
         public string CorrectAnswer { get; set; }
-
         public string Explanation { get; set; }
 
         public Question()
         {
         }
 
-        public Question(string questionText, string[] options, string correctAnswer, string explanation)
+        public Question(string text, string[] options, string correctAnswer, string explanation)
         {
-            QuestionText = questionText;
+            Text = text;
             Options = options;
             CorrectAnswer = correctAnswer;
             Explanation = explanation;
@@ -26,17 +23,14 @@ namespace WpfBot
 
         public override string ToString()
         {
-            string text = QuestionText + "\n\n";
-
-            char optionLetter = 'A';
-
+            string result = Text + "\n\n";
+            char label = 'A';
             foreach (string option in Options)
             {
-                text += optionLetter + ") " + option + "\n";
-                optionLetter++;
+                result += label + ") " + option + "\n";
+                label++;
             }
-
-            return text;
+            return result;
         }
     }
 }

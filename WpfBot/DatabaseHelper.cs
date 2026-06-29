@@ -4,13 +4,10 @@ using MySql.Data.MySqlClient;
 
 namespace WpfBot
 {
-    internal class DatabaseHelper
+    public class DatabaseHelper
     {
-       
-        private string connectionString =
-            "server=localhost;database=CyberBotDB;uid=root;pwd=;";
+        private string connectionString = "server=localhost;database=CyberBotDB;uid=root;pwd=;";
 
-       
         public bool AddTask(TaskItem task)
         {
             try
@@ -19,14 +16,9 @@ namespace WpfBot
                 {
                     conn.Open();
 
-                    string sql =
-                    @"INSERT INTO Tasks
-                    (Title, Description, ReminderTime, Completed)
-                    VALUES
-                    (@title,@description,@reminder,@completed)";
+                    string sql = "INSERT INTO Tasks (Title, Description, ReminderTime, Completed) VALUES (@title, @description, @reminder, @completed)";
 
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
-
                     cmd.Parameters.AddWithValue("@title", task.Title);
                     cmd.Parameters.AddWithValue("@description", task.Description);
 
@@ -57,22 +49,18 @@ namespace WpfBot
                     conn.Open();
 
                     string sql = "SELECT * FROM Tasks";
-
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
-
                     MySqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
                         TaskItem task = new TaskItem();
-
                         task.Title = reader["Title"].ToString();
                         task.Description = reader["Description"].ToString();
+                        task.Completed = Convert.ToBoolean(reader["Completed"]);
 
                         if (reader["ReminderTime"] != DBNull.Value)
                             task.ReminderTime = Convert.ToDateTime(reader["ReminderTime"]);
-
-                        task.Completed = Convert.ToBoolean(reader["Completed"]);
 
                         tasks.Add(task);
                     }
@@ -85,28 +73,39 @@ namespace WpfBot
             return tasks;
         }
 
-        public bool DeleteTask(string title)
+        public TaskItem GetTask(string title)
         {
+            TaskItem task = null;
+
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
 
-                    string sql =
-                        "DELETE FROM Tasks WHERE Title=@title";
-
+                    string sql = "SELECT * FROM Tasks WHERE Title = @title";
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
-
                     cmd.Parameters.AddWithValue("@title", title);
 
-                    return cmd.ExecuteNonQuery() > 0;
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        task = new TaskItem();
+                        task.Title = reader["Title"].ToString();
+                        task.Description = reader["Description"].ToString();
+                        task.Completed = Convert.ToBoolean(reader["Completed"]);
+
+                        if (reader["ReminderTime"] != DBNull.Value)
+                            task.ReminderTime = Convert.ToDateTime(reader["ReminderTime"]);
+                    }
                 }
             }
             catch (Exception)
             {
-                return false;
             }
+
+            return task;
         }
 
         public bool CompleteTask(string title)
@@ -117,13 +116,8 @@ namespace WpfBot
                 {
                     conn.Open();
 
-                    string sql =
-                    @"UPDATE Tasks
-                      SET Completed=1
-                      WHERE Title=@title";
-
+                    string sql = "UPDATE Tasks SET Completed = 1 WHERE Title = @title";
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
-
                     cmd.Parameters.AddWithValue("@title", title);
 
                     return cmd.ExecuteNonQuery() > 0;
@@ -143,13 +137,8 @@ namespace WpfBot
                 {
                     conn.Open();
 
-                    string sql =
-                    @"UPDATE Tasks
-                      SET ReminderTime=@reminder
-                      WHERE Title=@title";
-
+                    string sql = "UPDATE Tasks SET ReminderTime = @reminder WHERE Title = @title";
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
-
                     cmd.Parameters.AddWithValue("@title", title);
                     cmd.Parameters.AddWithValue("@reminder", reminder);
 
@@ -162,44 +151,25 @@ namespace WpfBot
             }
         }
 
-        public TaskItem GetTask(string title)
+        public bool DeleteTask(string title)
         {
-            TaskItem task = null;
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
 
-                    string sql =
-                    "SELECT * FROM Tasks WHERE Title=@title";
-
+                    string sql = "DELETE FROM Tasks WHERE Title = @title";
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
-
                     cmd.Parameters.AddWithValue("@title", title);
 
-                    MySqlDataReader reader = cmd.ExecuteReader();
-
-                    if (reader.Read())
-                    {
-                        task = new TaskItem();
-
-                        task.Title = reader["Title"].ToString();
-                        task.Description = reader["Description"].ToString();
-
-                        if (reader["ReminderTime"] != DBNull.Value)
-                            task.ReminderTime = Convert.ToDateTime(reader["ReminderTime"]);
-
-                        task.Completed = Convert.ToBoolean(reader["Completed"]);
-                    }
+                    return cmd.ExecuteNonQuery() > 0;
                 }
             }
             catch (Exception)
             {
+                return false;
             }
-
-            return task;
         }
     }
 }
